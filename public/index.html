@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="materials/style.css">
+	<title>Index</title>
+</head>
+
+<body>
+
+    <div class="landingDiv">
+
+	    <h1 class="landingHeader">Hello there</h1>
+
+        <p class="landingText">Welcome to Premium Organs, your one-stop shop for brains, hearts, arms, legs, lungs, kidneys, and much much more!</p>
+
+        <a class="landingButton" href="#form">Get Started</a>
+        <a class="landingButton" href="account.html">Account</a>
+
+    </div>
+
+    <div class="formContainer" id="form">
+        <div class="form">
+            <div class="formTopper">
+                
+                <h1 class="formHeader selectedHeader" id="signup" onclick="formSelector('signup')">Signup</h1>
+                <h1 class="formHeader" id="login" onclick="formSelector('login')">Login</h1>
+
+            </div>
+            <div class="formContent showForm" id="signupForm">
+
+                <input class="formInput" placeholder="Username"/>
+
+                <input class="formInput" placeholder="Email"/>
+
+                <input class="formInput" placeholder="Passcode"/>
+
+                <button class="formButton">Signup</button>
+
+            </div>
+            <div class="formContent" id="loginForm">
+
+                <input class="formInput" placeholder="Username"/>
+
+                <input class="formInput" placeholder="Passcode"/>
+
+                <button class="formButton">Login</button>
+
+            </div>
+        </div>
+    </div>
+
+<script src="materials/script.js"></script>
+</body>
+
+</html>

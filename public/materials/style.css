@@ -1,0 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+body {
+
+    margin: 0;
+    padding: 0;
+    font-family: "poppins", "sans-serif";
+    overflow-x: hidden;
+    overflow-y: scroll;
+    --primary: rgb(4, 214, 4);
+    --primaryShade: rgb(15, 15, 15);
+    --secondaryShade: rgb(238, 240, 243);
+    scroll-behavior: smooth;
+    scroll-padding: 300px;
+}
+::-webkit-scrollbar {
+
+    width: 12px;
+    height: 90px;
+}
+
+
+::-webkit-scrollbar-track { 
+
+    background: var(--primaryShade);
+}
+
+::-webkit-scrollbar-thumb {
+
+    background: gray;
+    width: 5px;
+    border-radius: 30px;
+
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background: darkgray;
+
+}
+
+@keyframes floatUp {
+
+    0% {
+        top: -20px;
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+.landingDiv {
+
+    min-height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url("landingImage.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0.98);
+    transition: all 0.3s;
+}
+.landingDiv:hover {
+
+    transform: scale(1);
+}
+.landingHeader {
+
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 52px;
+    color: var(--primary);
+}
+.landingText {
+
+    margin: 20px 0;
+    font-size: 18px;
+    color: white;
+    width: 500px;
+    text-align: center;
+}
+
+.landingButton {
+
+    display: block;
+    width: fit-content;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 30px;
+    font-size: 17px;
+    border-radius: 6px;
+    transition: all 0.3s;
+    margin: 20px 0;
+    box-shadow: rgba(0, 0, 0, 0.6) 0 12px 24px 0;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+.landingButton:hover {
+
+    box-shadow: rgba(0, 0, 0, 0.7) 0 6px 24px 0, inset rgba(255, 255, 255, 0.3) 0 0 0 10000px;
+}
+.landingButton:focus {
+
+    box-shadow: rgba(0, 0, 0, 0.9) 0 20px 36px 0, inset rgba(0, 0, 0, 0.1) 0 0 0 10000px;
+    background: var(--primary);
+    color: white;
+}
+.formContainer {
+
+    background: var(--secondaryShade);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    transform: scale(0.98);
+    transition: all 0.3s;
+}
+.formContainer:hover {
+
+    transform: scale(1);
+}
+.form {
+
+    width: 500px;
+    margin: auto;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.04) 0 12px 60px 0;
+    background: rgb(255, 255, 255);
+    padding: 10px;
+    transition: all 0.3s;
+
+}
+.formContent {
+
+    padding: 15px 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    display: none;
+    animation: floatUp 0.6s;
+    position: relative;
+}
+.formInput {
+
+    border: 1.5px solid rgb(165, 165, 165);
+    padding: 10px;
+    outline: none;
+    transition: all 0.3s;
+    margin: 18px;
+    border-radius: 6px;
+    font-family: "poppins", sans-serif;
+    font-size: 18px;
+}
+.formInput:hover {
+
+    border-color: var(--primary);
+}
+.formInput:focus {
+
+    border-color: var(--primary);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 3px 36px 0;
+}
+.formButton {
+
+    display: block;
+    width: 60%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 0;
+    font-size: 17px;
+    border-radius: 6px;
+    transition: all 0.3s;
+    margin: 20px 0;
+    box-shadow: rgba(0, 0, 0, 0.22) 0 12px 24px 0;
+    background: var(--primary);
+    color: white;
+    font-family: "poppins";
+    font-weight: bold;
+}
+.formButton:hover {
+
+    box-shadow: rgba(0, 0, 0, 0.14) 0 6px 24px 0, inset rgba(255, 255, 255, 0.247) 0 0 0 10000px;
+}
+.formButton:focus {
+
+    box-shadow: rgba(0, 0, 0, 0.26) 0 12px 36px 0, inset rgba(255, 255, 255, 0.247) 0 0 0 10000px;
+    background: var(--primary);
+    color: white;
+}
+.formTopper {
+
+    background: rgb(236, 236, 236);
+    display: flex;
+    justify-content: space-around;
+    border-radius: 6px;
+}
+.formHeader {
+
+    width: 50%;
+    text-align: center;
+    margin: 4px;
+    padding: 4px;
+    border-radius: 6px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 28px;
+}
+.formHeader:hover {
+
+    background: rgb(219, 219, 219);
+}
+.selectedHeader {
+
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.13) 0 6px 45px 0;
+}
+.selectedHeader:hover {
+
+    background: white;
+}
+.showForm {
+
+    display: flex;
+}
+
+/*Account*/
+
+.accountContainer {
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url("landingImage.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    transform: scale(0.98);
+    transition: all 0.3s;
+}
+.accountContainer:hover {
+
+    transform: scale(1);
+}
+.accountParent {
+
+    width: 500px;
+    margin: auto;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.9) 0 12px 60px 0;
+    transition: all 0.3s;
+    overflow: hidden;
+}
+.accountTopper {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(236, 236, 236);
+}
+.accountIcon {
+
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+}
+.accountHeader {
+
+    margin-left: 10px;
+    font-size: 32px;
+    color: var(--primary);
+}
+.accountContent {
+
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+        background: white;
+
+}
+.accountContent h1 {
+
+    font-size: 20px;
+}
