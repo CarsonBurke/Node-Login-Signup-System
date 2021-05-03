@@ -5,4 +5,4 @@ app.use(express.static(__dirname + '/public'))
 
 
 
-var server = app.listen(5000)
+var server = app.listen(5200)
