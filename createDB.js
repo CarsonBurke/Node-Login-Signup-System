@@ -1,20 +1,20 @@
 var pgtools = require("pgtools")
 
 const config = {
-  
-  user: "postgres",
-  host: "localhost",
-  password: "postgres",
-  port: 5432
+
+    user: "postgres",
+    host: "localhost",
+    password: "postgres",
+    port: 5432
 }
 
-pgtools.createdb(config, "nodeProject", function(err, res) {
+pgtools.createdb(config, "nodeProject1", function(error, response) {
 
-  if (err) {
+    if (error) {
 
-    console.error(err)
-    process.exit(-1)
-  }
+        console.error(error)
+        process.exit(-1)
+    }
 
-  console.log(res)
+    console.log(response)
 })
