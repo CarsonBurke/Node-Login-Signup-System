@@ -1,0 +1,36 @@
+<%- include('./navbar.ejs', {page: "Account"}) %>
+
+    <div class="accountContainer parallaxifyBg">
+        <div class="accountParent animate floatUp">
+            <div class="accountTopper">
+
+                <img src="materials/images/landingImage.jpg" alt="" class="accountIcon">
+
+                <h1 class="accountHeader">
+                    <%= account.username %>
+                </h1>
+
+            </div>
+            <div class="accountContent">
+                <div class="accontChild">
+
+                    <h1 class="">Email:
+                        <%= account.email %>
+                    </h1>
+
+                </div>
+                <div class="accontChild">
+
+                    <h1 class="">Passcode:
+                        <%= account.passcode %>
+                    </h1>
+
+                </div>
+
+                <a class="button" href="/logout">Log out</a>
+
+            </div>
+        </div>
+    </div>
+
+    <%- include('./footer.ejs'); %>

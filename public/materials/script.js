@@ -13,8 +13,7 @@ function formSelector(selector) {
 
         signupForm.classList.add("showForm")
         loginForm.classList.remove("showForm")
-    }
-    else if (selector == "login") {
+    } else if (selector == "login") {
 
         signup.classList.remove("selectedHeader")
         login.classList.add("selectedHeader")
@@ -22,4 +21,19 @@ function formSelector(selector) {
         signupForm.classList.remove("showForm")
         loginForm.classList.add("showForm")
     }
+}
+
+function navbardivactivate() {
+
+    document.getElementById("navsidebarcontent").classList.toggle("navsidebarcontentactive")
+
+    document.getElementById("navsidebarbutton").classList.toggle("navsidebarbuttonactive")
+
+
+    document.getElementById("bar1").classList.toggle("barclick1")
+
+    document.getElementById("bar2").classList.toggle("barclick2")
+
+    document.getElementById("bar3").classList.toggle("barclick3")
+
 }
