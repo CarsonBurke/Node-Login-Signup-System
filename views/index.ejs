@@ -1,0 +1,53 @@
+<%- include('./navbar.ejs', {page: "Home", hasAccount: hasAccount}) %>
+
+    <div class="landingDiv parallaxifyBg">
+
+        <h1 class="landingHeader animate floatUp">Hello there</h1>
+
+        <p class="landingText animate floatUp">Welcome to Premium Organs, your one-stop shop for brains, hearts, arms, legs, lungs, kidneys, and much much more!</p>
+
+        <div class="landingButtonContainer animate floatUp">
+            <% if (hasAccount != true) { %>
+                <a class="landingButton" href="#form">Get Started</a>
+                <% } %>
+                    <% if (hasAccount == true) { %>
+                        <a class="landingButton" href="/account">Account</a>
+                        <% } %>
+        </div>
+
+    </div>
+    <% if (hasAccount != true) { %>
+        <div class="formContainer" id="form">
+
+            <div class="form animate floatUp">
+                <div class="formTopper">
+
+                    <h1 class="formHeader selectedHeader" id="signup" onclick="formSelector('signup')">Signup</h1>
+                    <h1 class="formHeader" id="login" onclick="formSelector('login')">Login</h1>
+
+                </div>
+                <form class="formContent showForm" id="signupForm" action="/signup" method="post">
+
+                    <input class="formInput" placeholder="Username" type="text" name="username" />
+
+                    <input class="formInput" placeholder="Email" type="email" name="email" />
+
+                    <input class="formInput" placeholder="Password" type="password" name="password" />
+
+                    <button type="submit" class="formButton">Signup</button>
+
+                </form>
+                <form class="formContent" id="loginForm">
+
+                    <input class="formInput" placeholder="Username" />
+
+                    <input class="formInput" placeholder="Password" />
+
+                    <button type="submit" class="formButton">Login</button>
+
+                </form>
+            </div>
+        </div>
+        <% } %>
+
+            <%- include('./footer.ejs'); %>

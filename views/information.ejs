@@ -1,0 +1,32 @@
+<%- include('./navbar.ejs', {page: "Information"}) %>
+
+    <div class="infoTableOuter">
+        <table class="infoTable">
+            <thead>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Password</th>
+            </thead>
+            <tbody id="place-here">
+                <% accounts.forEach(function(account) { %>
+                    <tr>
+                        <td>
+                            <%= account.id %>
+                        </td>
+                        <td>
+                            <%= account.username %>
+                        </td>
+                        <td>
+                            <%= account.email %>
+                        </td>
+                        <td>
+                            <%= account.password %>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <%- include('./footer.ejs'); %>

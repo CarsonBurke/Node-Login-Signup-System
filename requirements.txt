@@ -1,1 +1,3 @@
-npm pg
+npm i pg
+npm i bcrypt
+npm i dotenv
