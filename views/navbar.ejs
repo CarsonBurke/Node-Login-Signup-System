@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="materials/style.css">
+    <link rel="stylesheet" type="text/css" href="/materials/style.css">
     <title>Premium Organs |
         <%= page %>
     </title>
@@ -33,14 +33,14 @@
                     <a href="/#form">Login</a>
                     <% } %>
                         <% if (hasAccount == true) { %>
-                            <a href="/account">Account</a>
+                            <a href="/profiles/<%= userAccount.user_id %>">Account</a>
                             <% } %>
 
             </div>
         </div>
 
         <a class="navbartitle" href="/">
-            <img class="navbartitleicon" src="materials/images/landingImage.jpg" />
+            <img class="navbartitleicon" src="/materials/images/landingImage.jpg" />
             <h1 class="navbartitlechild">Premium Organs</h1>
         </a>
 
@@ -54,13 +54,13 @@
                     <a href="/#form">Login</a>
                     <% } %>
                         <% if (hasAccount == true) { %>
-                            <a href="/account">Account</a>
+                            <a href="/profiles/<%= userAccount.user_id %>">Account</a>
                             <% } %>
 
             </div>
             <div class="navtopbarextra">
 
-                <a class="navtopbarprofile" href="/account"><span class="material-icons-outlined navtopbarprofileicon">
+                <a class="navtopbarprofile" href="/profiles/<%= userAccount.user_id %>"><span class="material-icons-outlined navtopbarprofileicon">
             account_circle
             </span></a>
             </div>

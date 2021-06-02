@@ -1,29 +1,21 @@
 {
-    "name": "nodeStart",
+    "name": "nodeproject",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "deleteDb": "node -e \"require('./pgContent').deleteDb()\"",
-        "myScript": "node -e \"require('./pgContent').createDb()\"",
-        "createTables": "node -e \"require('./pgContent').createTables()\""
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
         "bcrypt": "^5.0.1",
-        "client-sessions": "^0.8.0",
         "dotenv": "^10.0.0",
         "ejs": "^3.1.6",
         "express": "^4.17.1",
         "express-session": "^1.17.2",
         "jquery": "^3.6.0",
-        "pg": "^8.6.0",
-        "pgtools": "^0.3.1",
-        "pug": "^3.0.2",
-        "uid-safe": "^2.1.5",
-        "uniqid": "^5.3.0"
+        "pg": "^8.6.0"
     }
 }

@@ -1,10 +1,10 @@
-<%- include('./navbar.ejs', {page: "Account"}) %>
+<%- include('./navbar.ejs', {page: account.username, hasAccount: hasAccount, userAccount: userAccount}) %>
 
     <div class="accountContainer parallaxifyBg">
         <div class="accountParent animate floatUp">
             <div class="accountTopper">
 
-                <img src="materials/images/landingImage.jpg" alt="" class="accountIcon">
+                <img src="/materials/images/landingImage.jpg" alt="" class="accountIcon">
 
                 <h1 class="accountHeader">
                     <%= account.username %>
@@ -21,13 +21,14 @@
                 </div>
                 <div class="accontChild">
 
-                    <h1 class="">Password:
-                        <%= account.password %>
+                    <h1 class="">Hash:
+                        <%= account.hash %>
                     </h1>
 
                 </div>
-
-                <a class="button" href="/logout">Log out</a>
+                <% if (isAccount == true) { %>
+                    <a class="button" href="/logout">Log out</a>
+                    <% } %>
 
             </div>
         </div>

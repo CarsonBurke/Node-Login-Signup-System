@@ -1,4 +1,4 @@
-<%- include('./navbar.ejs', {page: "Information"}) %>
+<%- include('./navbar.ejs', {page: "Information", hasAccount: hasAccount, userAccount: userAccount}) %>
 
     <div class="infoTableOuter">
         <table class="infoTable">
@@ -6,13 +6,15 @@
                 <th>ID</th>
                 <th>Username</th>
                 <th>Email</th>
-                <th>Password</th>
+                <th>Hash</th>
             </thead>
             <tbody id="place-here">
                 <% accounts.forEach(function(account) { %>
                     <tr>
                         <td>
-                            <%= account.id %>
+                            <a class="button" href="/profiles/<%= account.user_id %>">
+                                <%= account.user_id %>
+                            </a>
                         </td>
                         <td>
                             <%= account.username %>
@@ -21,7 +23,7 @@
                             <%= account.email %>
                         </td>
                         <td>
-                            <%= account.password %>
+                            <%= account.hash %>
                         </td>
                     </tr>
                     <% }) %>

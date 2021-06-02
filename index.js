@@ -1,10 +1,10 @@
 require('dotenv').config()
-let express = require('express')
-let session = require('express-session')
-let bodyParser = require("body-parser")
-let bcrypt = require('bcrypt')
-let { Pool, Client } = require('pg');
-const { post } = require('jquery')
+const express = require('express')
+const session = require('express-session')
+const bodyParser = require("body-parser")
+const bcrypt = require('bcrypt')
+const { Pool, Client } = require('pg')
+const { Router } = require('express')
 
 let app = express()
 
@@ -55,55 +55,90 @@ app.post('/signup', function(req, res, next) {
         return hash
     }
 
-    function insertAccount() {
-        return new Promise(function(resolve) {
-            client.query("INSERT INTO users(username, email, password) VALUES('" + username + "', '" + email + "', '" + generateHash(password) + "') RETURNING *", (err, res) => {
+    let insertAccount = new Promise((resolve, reject) => {
+        client.query("INSERT INTO users(username, email, hash) VALUES('" + username + "', '" + email + "', '" + generateHash(password) + "') RETURNING *", (err, res) => {
 
-                resolve(res.rows[0].id)
-            })
+            if (res) {
+
+                resolve(res.rows[0].user_id)
+            }
         })
-    }
+    })
 
-    addValues()
+    insertAccount.then((value) => {
 
-    async function addValues() {
+        console.log("signup up with user_id: " + value)
 
-        req.session.id = await insertAccount()
+        req.session.user_id = value
         req.session.username = username
         req.session.email = email
-        req.session.password = generateHash(password)
+        req.session.hash = generateHash(password)
 
-        console.log("id: " + JSON.stringify(req.session))
-
-        res.redirect("/account")
+        res.redirect("/profiles/" + req.session.user_id)
 
         next()
-    }
+    })
 })
 
 app.post('/login', function(req, res) {
 
+    let password = req.body.password
+
+    accounts().then(
+
+        function(value) {
+
+            for (let account of value) {
+
+                bcrypt.compare(password, account.hash, function(err, result) {
+
+                    if (!err && result) {
+
+                        console.log("logged in with user_id: " + account.user_id)
+
+                        req.session.user_id = account.user_id
+                        req.session.username = account.username
+                        req.session.email = account.email
+                        req.session.hash = account.hash
+
+                        res.redirect("/profiles/" + req.session.user_id)
+                    }
+                })
+            }
+        })
 })
 
-let accounts
+function accounts() {
+    return new Promise((resolve, reject) => {
+        client.query("TABLE users", function(err, res) {
 
-client.query("TABLE users", function(err, res) {
+            if (err) {
 
-    if (err) {
+                reject(err.stack)
+            } else {
 
-        console.log(err.stack)
-    } else {
-
-        accounts = res.rows
-    }
-})
+                resolve(res.rows)
+            }
+        })
+    })
+}
 
 function isUser(req) {
 
-    if (req.session && req.session.username) {
+    if (req.session && req.session.user_id) {
 
         return true
     }
+    return false
+}
+
+function compareAccount(id1, id2) {
+
+    if (id1 == id2) {
+
+        return true
+    }
+
     return false
 }
 
@@ -119,85 +154,76 @@ function enforceAccount(req, res, next) {
     }
 }
 
-renderPages()
+app.use(express.static(__dirname + '/views'))
 
-function renderPages() {
+app.get('/profiles/:user_id', function(req, res) {
 
-    app.use(express.static(__dirname + '/views'))
+    accounts().then(
 
-    app.get('/', function(req, res) {
+        function(value) {
 
-        res.render(__dirname + "/views/index.ejs", {
+            for (let account of value) {
 
-            hasAccount: isUser(req)
-        })
-    })
+                if (account.user_id == req.params.user_id) {
 
-    app.get('/account', enforceAccount, function(req, res) {
+                    res.render(__dirname + "/views/profile.ejs", {
 
-        res.render(__dirname + "/views/account.ejs", {
-            account: {
-                username: req.session.username,
-                email: req.session.email,
-                password: req.session.password
-            },
-            hasAccount: isUser(req)
-        })
-    })
+                        account: account,
+                        isAccount: compareAccount(req.session.user_id, account.user_id),
+                        userAccount: {
+                            user_id: req.session.user_id,
+                            username: req.session.username,
+                            email: req.session.email,
+                            hash: req.session.hash
+                        },
+                        hasAccount: isUser(req)
+                    })
 
-    //app.get('/:id', function(req, res) {
-    //
-    //    for (let account of accounts) {
-    //
-    //        if (account.id == '/:id') {
-    //
-    //            console.log(account.id)
-    //
-    //            res.render(__dirname + "/views/account.ejs", {
-    //                account: {
-    //                    username: req.session.username,
-    //                    email: req.session.email,
-    //                    password: req.session.password
-    //                },
-    //                hasAccount: isUser(req)
-    //            })
-    //        }
-    //    }
-    //})
-
-    app.get('/information', function(req, res) {
-
-        for (let account of accounts) {
-
-            if (account.username == '/information') {
-
-                console.log(account.id)
+                    break
+                }
             }
-        }
-
-        res.render(__dirname + "/views/information.ejs", {
-
-            accounts: accounts,
-            hasAccount: isUser(req)
         })
+});
+
+app.get('/', function(req, res) {
+
+    res.render(__dirname + "/views/index.ejs", {
+        userAccount: {
+            user_id: req.session.user_id,
+            username: req.session.username,
+            email: req.session.email,
+            hash: req.session.hash
+        },
+        hasAccount: isUser(req)
     })
+})
 
-    app.get('/navbar', function(req, res) {
+app.get('/information', function(req, res) {
+    accounts().then(
 
-        res.render(__dirname + "/views/information.ejs", {
+        function(value) {
 
-            accounts: accounts,
-            hasAccount: isUser(req)
+            res.render(__dirname + "/views/information.ejs", {
+
+                accounts: value,
+                userAccount: {
+                    user_id: req.session.user_id,
+                    username: req.session.username,
+                    email: req.session.email,
+                    hash: req.session.hash
+                },
+                hasAccount: isUser(req)
+            })
         })
-    })
+})
 
-    app.get('/logout', function(req, res, next) {
 
-        req.session.destroy()
-        res.redirect('/')
-        next()
-    })
-}
+app.get('/logout', function(req, res, next) {
+
+    req.session.destroy()
+    res.redirect('/')
+    next()
+})
 
 app.listen(5200)
 
@@ -210,5 +236,7 @@ app.listen(5200)
 //https://stackabuse.com/using-postgresql-with-nodejs-and-node-postgres/
 
 //https://expressjs.com/en/resources/middleware/session.html
+
+//https://github.com/Createdd/simpleDynamicNodeJS/blob/master/router.js
 
 //

@@ -1,3 +1,0 @@
-npm i pg
-npm i bcrypt
-npm i dotenv
