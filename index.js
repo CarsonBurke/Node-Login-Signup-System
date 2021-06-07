@@ -4,7 +4,6 @@ const session = require('express-session')
 const bodyParser = require("body-parser")
 const bcrypt = require('bcrypt')
 const { Pool, Client } = require('pg')
-const { Router } = require('express')
 
 let app = express()
 
@@ -37,7 +36,7 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.post('/signup', function(req, res, next) {
+app.post('/signup', async function(req, res, next) {
 
     const username = req.body.username
     const email = req.body.email
@@ -56,56 +55,77 @@ app.post('/signup', function(req, res, next) {
     }
 
     let insertAccount = new Promise((resolve, reject) => {
-        client.query("INSERT INTO users(username, email, hash) VALUES('" + username + "', '" + email + "', '" + generateHash(password) + "') RETURNING *", (err, res) => {
+        client.query("INSERT INTO users(username, email, hash) VALUES($1, $2, $3) RETURNING user_id", [username, email, generateHash(password)], (err, res) => {
 
             if (res) {
 
                 resolve(res.rows[0].user_id)
+            } else if (err) {
+
+                resolve(false)
             }
         })
     })
 
-    insertAccount.then((value) => {
+    insertAccount = await insertAccount
 
-        console.log("signup up with user_id: " + value)
+    if (insertAccount != false) {
 
-        req.session.user_id = value
-        req.session.username = username
-        req.session.email = email
-        req.session.hash = generateHash(password)
+        console.log("signup up with user_id: " + insertAccount)
+
+        req.session.user_id = insertAccount
 
         res.redirect("/profiles/" + req.session.user_id)
 
         next()
-    })
+    } else {
+
+        res.redirect("/")
+        next()
+    }
 })
 
-app.post('/login', function(req, res) {
+app.post('/login', async function(req, res, next) {
 
+    let email = req.body.email
     let password = req.body.password
 
-    accounts().then(
+    function returnHashIfAccount(email) {
+        return new Promise((resolve, reject) => {
+            client.query("SELECT * FROM users WHERE email = $1", [email], function(err, res) {
 
-        function(value) {
+                if (res.rows[0]) {
 
-            for (let account of value) {
+                    resolve(res.rows[0])
+                } else {
 
-                bcrypt.compare(password, account.hash, function(err, result) {
+                    resolve(false)
+                }
+            })
+        })
+    }
 
-                    if (!err && result) {
+    if (await returnHashIfAccount(email) != false) {
 
-                        console.log("logged in with user_id: " + account.user_id)
+        let account = await returnHashIfAccount(email)
 
-                        req.session.user_id = account.user_id
-                        req.session.username = account.username
-                        req.session.email = account.email
-                        req.session.hash = account.hash
+        bcrypt.compare(password, account.hash, function(err, result) {
 
-                        res.redirect("/profiles/" + req.session.user_id)
-                    }
-                })
+            if (!err && result) {
+
+                console.log("logged in with user_id: " + account.user_id)
+
+                req.session.user_id = account.user_id
+
+                res.redirect("/profiles/" + req.session.user_id)
+            } else {
+
+                res.redirect("/")
+
+                next()
             }
         })
+    }
 })
 
 function accounts() {
@@ -118,6 +138,40 @@ function accounts() {
             } else {
 
                 resolve(res.rows)
+            }
+        })
+    })
+}
+
+function returnIfAccount(id1, id2) {
+    return new Promise((resolve, reject) => {
+        if (id1 == id2 || (id1 && !id2)) {
+            client.query("SELECT * FROM users WHERE user_id = $1", [id1], function(err, res) {
+
+                if (res.rows[0]) {
+
+                    resolve(res.rows[0])
+                } else {
+
+                    resolve(false)
+                }
+            })
+        } else {
+            resolve(false)
+        }
+    })
+}
+
+function findAccountWithId(id) {
+    return new Promise((resolve, reject) => {
+        client.query("SELECT * FROM users WHERE user_id = $1", [id], function(err, res) {
+
+            if (err) {
+
+                reject(err.stack)
+            } else {
+
+                resolve(res.rows[0])
             }
         })
     })
@@ -156,65 +210,29 @@ function enforceAccount(req, res, next) {
 
 app.use(express.static(__dirname + '/views'))
 
-app.get('/profiles/:user_id', function(req, res) {
+app.get('/profiles/:user_id', async function(req, res) {
 
-    accounts().then(
+    res.render(__dirname + "/views/profile.ejs", {
 
-        function(value) {
-
-            for (let account of value) {
-
-                if (account.user_id == req.params.user_id) {
-
-                    res.render(__dirname + "/views/profile.ejs", {
-
-                        account: account,
-                        isAccount: compareAccount(req.session.user_id, account.user_id),
-                        userAccount: {
-                            user_id: req.session.user_id,
-                            username: req.session.username,
-                            email: req.session.email,
-                            hash: req.session.hash
-                        },
-                        hasAccount: isUser(req)
-                    })
-
-                    break
-                }
-            }
-        })
+        account: await findAccountWithId(req.params.user_id),
+        userAccount: await returnIfAccount(req.session.user_id, req.params.user_id),
+    })
 });
 
-app.get('/', function(req, res) {
+app.get('/', async function(req, res) {
 
     res.render(__dirname + "/views/index.ejs", {
-        userAccount: {
-            user_id: req.session.user_id,
-            username: req.session.username,
-            email: req.session.email,
-            hash: req.session.hash
-        },
-        hasAccount: isUser(req)
+        userAccount: await returnIfAccount(req.session.user_id),
     })
 })
 
-app.get('/information', function(req, res) {
-    accounts().then(
+app.get('/information', async function(req, res) {
 
-        function(value) {
+    res.render(__dirname + "/views/information.ejs", {
 
-            res.render(__dirname + "/views/information.ejs", {
-
-                accounts: value,
-                userAccount: {
-                    user_id: req.session.user_id,
-                    username: req.session.username,
-                    email: req.session.email,
-                    hash: req.session.hash
-                },
-                hasAccount: isUser(req)
-            })
-        })
+        accounts: await accounts(),
+        userAccount: await returnIfAccount(req.session.user_id),
+    })
 })
 
 

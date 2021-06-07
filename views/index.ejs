@@ -1,4 +1,4 @@
-<%- include('./navbar.ejs', {page:"Home", hasAccount: hasAccount, userAccount: userAccount}) %>
+<%- include('./navbar.ejs', {page:"Home", userAccount: userAccount}) %>
 
     <div class="landingDiv parallaxifyBg">
 
@@ -7,16 +7,16 @@
         <p class="landingText animate floatUp">Welcome to Premium Organs, your one-stop shop for brains, hearts, arms, legs, lungs, kidneys, and much much more!</p>
 
         <div class="landingButtonContainer animate floatUp">
-            <% if (hasAccount != true) { %>
+            <% if (userAccount == false) { %>
                 <a class="landingButton" href="#form">Get Started</a>
                 <% } %>
-                    <% if (hasAccount == true) { %>
+                    <% if (userAccount != false) { %>
                         <a class="landingButton" href="/profiles/<%= userAccount.user_id %>">Account</a>
                         <% } %>
         </div>
 
     </div>
-    <% if (hasAccount != true) { %>
+    <% if (userAccount == false) { %>
         <div class=" formContainer" id="form">
 
             <div class="form animate floatUp">
@@ -39,7 +39,7 @@
                 </form>
                 <form class="formContent" id="loginForm" action="/login" method="POST">
 
-                    <input class="formInput" placeholder="Username" type="text" name="username" />
+                    <input class="formInput" placeholder="Email" type="email" name="email" />
 
                     <input class="formInput" placeholder="Password" type="password" name="password" />
 

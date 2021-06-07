@@ -1,4 +1,4 @@
-<%- include('./navbar.ejs', {page: account.username, hasAccount: hasAccount, userAccount: userAccount}) %>
+<%- include('./navbar.ejs', {page: account.username, userAccount: userAccount}) %>
 
     <div class="accountContainer parallaxifyBg">
         <div class="accountParent animate floatUp">
@@ -11,26 +11,27 @@
                 </h1>
 
             </div>
-            <div class="accountContent">
-                <div class="accontChild">
+            <% if (userAccount != false) { %>
+                <div class="accountContent">
+                    <div class="accontChild">
 
-                    <h1 class="">Email:
-                        <%= account.email %>
-                    </h1>
+                        <h1 class="">Email:
+                            <%= userAccount.email %>
+                        </h1>
 
-                </div>
-                <div class="accontChild">
+                    </div>
+                    <div class="accontChild">
 
-                    <h1 class="">Hash:
-                        <%= account.hash %>
-                    </h1>
+                        <h1 class="">Hash:
+                            <%= userAccount.hash %>
+                        </h1>
 
-                </div>
-                <% if (isAccount == true) { %>
+                    </div>
+
                     <a class="button" href="/logout">Log out</a>
-                    <% } %>
 
-            </div>
+                </div>
+                <% } %>
         </div>
     </div>
 

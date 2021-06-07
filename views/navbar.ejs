@@ -28,11 +28,11 @@
 
                 <a href="/">Home</a>
                 <a href="/information">Information</a>
-                <% if (hasAccount != true) { %>
+                <% if (userAccount == false) { %>
                     <a href="/#form">Signup</a>
                     <a href="/#form">Login</a>
                     <% } %>
-                        <% if (hasAccount == true) { %>
+                        <% if (userAccount != false) { %>
                             <a href="/profiles/<%= userAccount.user_id %>">Account</a>
                             <% } %>
 
@@ -49,11 +49,11 @@
 
                 <a href="/">Home</a>
                 <a href="/information">Information</a>
-                <% if (hasAccount != true) { %>
+                <% if (userAccount == false) { %>
                     <a href="/#form">Signup</a>
                     <a href="/#form">Login</a>
                     <% } %>
-                        <% if (hasAccount == true) { %>
+                        <% if (userAccount != false) { %>
                             <a href="/profiles/<%= userAccount.user_id %>">Account</a>
                             <% } %>
 

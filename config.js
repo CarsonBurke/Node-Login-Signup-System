@@ -3,7 +3,7 @@ let { Pool, Client } = require('pg');
 
 let tables = [{
     name: 'users',
-    content: 'user_id SERIAL, username VARCHAR, email VARCHAR, hash VARCHAR',
+    content: 'user_id SERIAL, username VARCHAR (50), email VARCHAR (50) UNIQUE, hash VARCHAR',
 }]
 
 let pool = new Pool({
